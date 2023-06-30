@@ -10,7 +10,8 @@ import DeleteIcon from "./assets/images/icons/DeleteIcon";
 import PlusIcon from "./assets/images/icons/PlusIcon";
 import MinusIcon from "./assets/images/icons/MinusIcon";
 import Comments from "./components/Comments";
-import AddCommentForm from "./components/AddComment";
+import AddComment from "./components/AddComment";
+import CommentCard from "./components/CommentCard";
 
 const thread = {
   currentUser: {
@@ -86,10 +87,12 @@ const thread = {
   ],
 };
 
+const initialComments = thread.comments;
+
 function App() {
-  const [replyComment, setReplyComment] = useState(thread.comments);
+  const [replyComment, setReplyComment] = useState(initialComments);
   const [showCommentForm, setShowCommentForm] = useState(false);
-  const [selectedComment, setselectedComment] = useState(false);
+  const [selectedComment, setSelectedComment] = useState(null);
 
   function setReplyHandler(comment) {
     setReplyComment((prevComments) => {
@@ -98,21 +101,27 @@ function App() {
     setShowCommentForm((showCommentForm) => !showCommentForm);
   }
 
-  function setselectedCommentHandler(comment) {
-    setselectedComment((selected) =>
-      selected?.id === comment.id ? null : comment
+  function setSelectedCommentHandler(comment) {
+    setSelectedComment((selected) =>
+      selected?.id === comment.id ? comment : null
     );
+    console.log(selected.id, selected.username);
   }
 
   return (
     <>
       <Comments
-        friends={thread.comments}
-        onReply={setReplyHandler}
-        replyComment={replyComment}
+        comments={replyComment}
+        onSelect={setSelectedCommentHandler}
+        selectedComment={selectedComment}
+        showCommentForm={showCommentForm}
       />
-      {showCommentForm && (
-        <AddCommentForm
+      {/* {replyComment.map((comment) => (
+        <CommentCard comment={comment} />
+      ))} */}
+      {!showCommentForm && (
+        <AddComment
+          onSelect={setSelectedCommentHandler}
           currentUser={thread.currentUser}
           onAddComment={setReplyHandler}
         />

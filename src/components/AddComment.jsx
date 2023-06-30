@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function AddComment({ currentUser, onAddComment }) {
+function AddComment({ currentUser, onAddComment, onSelect }) {
   const [addComment, setAddComment] = useState("");
   const [addImage, setAddImage] = useState(currentUser.image.png);
 
@@ -13,9 +13,15 @@ function AddComment({ currentUser, onAddComment }) {
       id: currentUser.id,
       content: addComment,
       createdAt: "",
-      replyingTo: "",
-      user: addImage,
+      score: 0,
+      // replyingTo: "",
+      replyingTo: onSelect.replyingTo,
+      user: {
+        image: { png: addImage },
+        username: currentUser.username,
+      },
     };
+    // console.log(onSelect);
     console.log(newComment);
     onAddComment(newComment);
   }

@@ -1,42 +1,46 @@
 import Replies from "./Replies";
 import ReplyIcon from "../assets/images/icons/ReplyIcon";
 
-function CommentCard({ friend, onReply, onCommentSelect }) {
-  const isSelected = onCommentSelect?.id === friend.id;
+function CommentCard({ comment, onSelect, selectedComment, showCommentForm }) {
+  const isSelected = selectedComment?.id === comment.id;
+
+  // console.log(isSelected.replies);
+
+  function onSelectHandler() {
+    onSelect(isSelected);
+  }
 
   return (
-    <li key={friend?.id} className="mb-4 flex flex-col">
+    <li key={comment.id} className="mb-4 flex flex-col">
       <div className="flex rounded-md bg-white px-2 py-4 md:p-5">
         <div className="mr-5 flex flex-col rounded-lg bg-[#F5F6FA] text-base text-[#5357B6]">
           <button>+</button>
-          <p className="font-semibold">{friend.score}</p>
+          <p className="font-semibold">{comment.score}</p>
           <button>-</button>
         </div>
-        <div className="text-left">
+        <div className="w-full text-left">
           <div className="mb-2 flex justify-between">
             <div className="mb-2 flex flex-initial flex-row items-center text-xs md:text-sm">
               <img
-                className="mr-4 w-8"
-                src={friend.user.image.png}
-                alt={friend.user.username}
+                className="mr-4 w-8 rounded-full"
+                src={comment.user.image.png}
+                alt={comment.user.username}
               />
-              <strong className="mr-4">{friend.user.username}</strong>
-              <span className="text-[#67727E]">{friend.createdAt}</span>
+              <strong className="mr-4">{comment.user.username}</strong>
+              <span className="text-[#67727E]">{comment.createdAt}</span>
             </div>
             <button
-              onClick={() => onReply(console.log(friend.id))}
+              onClick={() => onSelectHandler(comment.id, comment.user.username)}
               className="flex items-center bg-transparent text-xs font-bold text-[#5357B6]"
             >
               <ReplyIcon className="mr-2" />
-              {onReply ? "Reply" : "Cancel"}
+              {showCommentForm ? "Cancel" : " Reply"}
             </button>
           </div>
-          <p className="text-xs sm:text-sm">{friend.content}</p>
+          <p className="text-xs sm:text-sm">{comment.content}</p>
         </div>
       </div>
-      {friend.replies.length > 0 && (
-        <Replies friend={friend} isSelected={isSelected} />
-      )}
+      {comment.replies && <Replies comment={comment} isSelected={isSelected} />}
     </li>
   );
 }

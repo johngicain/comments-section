@@ -1,13 +1,14 @@
 import CommentCard from "./CommentCard";
 
-function Comments({ friends, onReply, onCommentSelect }) {
+function Comments({ comments, onSelect, selectedComment, showCommentForm }) {
   return (
     <ul className="max-w-6xl">
-      {friends.map((friend) => (
+      {comments.map((comment) => (
         <CommentCard
-          friend={friend}
-          onReply={onReply}
-          onCommentSelect={onCommentSelect}
+          comment={comment}
+          onSelect={onSelect}
+          selectedComment={selectedComment}
+          showCommentForm={showCommentForm}
         />
       ))}
     </ul>
